@@ -1,6 +1,6 @@
-package com.aumones.tools.communs.data.repository.custom;
+package com.aumones.tools.communs.data.repository.mongo;
 
-import com.aumones.tools.communs.data.model.AbstractModel;
+import com.aumones.tools.communs.data.model.mongo.MongoAbstractModel;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,16 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class AbstractRepositoryCustomImpl<T extends AbstractModel, S extends AbstractSearchRequestDto>
-    implements AbstractRepositoryCustom<T, S> {
+public class MongoAbstractRepositoryCustomImpl<T extends MongoAbstractModel, S extends AbstractSearchRequestDto>
+    implements MongoAbstractRepositoryCustom<T, S> {
 
   @Autowired
-  private MongoTemplate mongoTemplate;
+  protected MongoTemplate mongoTemplate;
 
   protected Sort.Direction sortDirection = Sort.Direction.DESC;
 
   protected String sortField = "createdDate";
 
+  @Override
   public List<T> search(S searchRequest) {
     final Query query = new Query().with(Sort.by(sortDirection, sortField));
     final List<Criteria> listCriteria = setListCriteria(searchRequest);
@@ -36,6 +37,7 @@ public class AbstractRepositoryCustomImpl<T extends AbstractModel, S extends Abs
     return mongoTemplate.find(query, getDocumentClass());
   }
 
+  @Override
   public Page<T> search(S searchRequest, Pageable page) {
     final Query query = new Query().with(Sort.by(sortDirection, sortField));
     final List<Criteria> listCriteria = setListCriteria(searchRequest);

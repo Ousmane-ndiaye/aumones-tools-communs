@@ -1,4 +1,4 @@
-package com.aumones.tools.communs.data.repository.custom;
+package com.aumones.tools.communs.data.repository;
 
 import com.aumones.tools.communs.data.model.AbstractModel;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;

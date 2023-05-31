@@ -1,20 +1,8 @@
 package com.aumones.tools.communs.data.model;
 
-import com.aumones.tools.communs.utils.designs.AuditMetadata;
-import org.springframework.data.annotation.Id;
+public interface AbstractModel<ID> {
 
-public abstract class AbstractModel extends AuditMetadata {
+  ID getId();
 
-  @Id
-  protected String id;
-
-  public AbstractModel() {}
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
+  void setId(ID id);
 }
