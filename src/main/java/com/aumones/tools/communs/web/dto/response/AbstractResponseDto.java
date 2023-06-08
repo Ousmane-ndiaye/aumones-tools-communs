@@ -1,16 +1,16 @@
 package com.aumones.tools.communs.web.dto.response;
 
-public abstract class AbstractResponseDto {
+public abstract class AbstractResponseDto<ID> {
 
-  private String id;
+  protected ID id;
 
   public AbstractResponseDto() {}
 
-  public String getId() {
+  public ID getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(ID id) {
     this.id = id;
   }
 }

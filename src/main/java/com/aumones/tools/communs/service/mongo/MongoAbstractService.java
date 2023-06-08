@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public abstract class MongoAbstractService<T extends MongoAbstractModel, S extends AbstractSearchRequestDto,
+public class MongoAbstractService<T extends MongoAbstractModel, S extends AbstractSearchRequestDto,
     C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>> implements AbstractService<T, S, C, U> {
 
   protected MongoAbstractRepository<T, S> repository;

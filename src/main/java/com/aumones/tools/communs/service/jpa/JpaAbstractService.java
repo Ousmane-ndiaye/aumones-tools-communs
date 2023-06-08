@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public abstract class JpaAbstractService<T extends JpaAbstractModel, S extends AbstractSearchRequestDto,
+public class JpaAbstractService<T extends JpaAbstractModel, S extends AbstractSearchRequestDto,
     C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>> implements AbstractService<T, S, C, U> {
 
   protected JpaAbstractRepository<T, S> repository;

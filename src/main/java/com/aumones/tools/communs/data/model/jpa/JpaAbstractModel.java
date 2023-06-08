@@ -11,7 +11,7 @@ import jakarta.persistence.MappedSuperclass;
 
 @Entity
 @MappedSuperclass
-public abstract class JpaAbstractModel extends AuditMetadata implements AbstractModel<Long> {
+public class JpaAbstractModel extends AuditMetadata implements AbstractModel<Long> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
