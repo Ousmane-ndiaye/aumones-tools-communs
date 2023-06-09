@@ -1,6 +1,6 @@
 package com.aumones.tools.communs.web.controller;
 
-import com.aumones.tools.communs.data.model.AbstractModel;
+import com.aumones.tools.communs.data.model.mongo.MongoAbstractModel;
 import com.aumones.tools.communs.service.AbstractService;
 import com.aumones.tools.communs.web.dto.request.AbstractCreateRequestDto;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
@@ -15,13 +15,12 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Deprecated
-public abstract class AbstractController<T extends AbstractModel, S extends AbstractSearchRequestDto,
-    C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto> {
+public abstract class MongoAbstractController<T extends MongoAbstractModel, S extends AbstractSearchRequestDto,
+    C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto<String>> {
 
   protected AbstractService<T, S, C, U> service;
 
-  public AbstractController(AbstractService<T, S, C, U> service) {
+  public MongoAbstractController(AbstractService<T, S, C, U> service) {
     this.service = service;
   }
 

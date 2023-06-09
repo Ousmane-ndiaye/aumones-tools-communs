@@ -1,6 +1,6 @@
 package com.aumones.tools.communs.web.controller;
 
-import com.aumones.tools.communs.data.model.AbstractModel;
+import com.aumones.tools.communs.data.model.jpa.JpaAbstractModel;
 import com.aumones.tools.communs.service.AbstractService;
 import com.aumones.tools.communs.web.dto.request.AbstractCreateRequestDto;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Deprecated
-public abstract class AbstractController<T extends AbstractModel, S extends AbstractSearchRequestDto,
-    C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto> {
+public abstract class JpaAbstractController<T extends JpaAbstractModel, S extends AbstractSearchRequestDto,
+    C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto<Long>> {
 
   protected AbstractService<T, S, C, U> service;
 
-  public AbstractController(AbstractService<T, S, C, U> service) {
+  public JpaAbstractController(AbstractService<T, S, C, U> service) {
     this.service = service;
   }
 
@@ -35,7 +35,7 @@ public abstract class AbstractController<T extends AbstractModel, S extends Abst
     return ResponseEntity.status(HttpStatus.OK).body(items);
   }
 
-  public ResponseEntity<R> single(String id) {
+  public ResponseEntity<R> single(Long id) {
     T item = service.get(id);
     if (item == null)
       throw new EntityNotFoundException("item.notFound");
@@ -53,7 +53,7 @@ public abstract class AbstractController<T extends AbstractModel, S extends Abst
     return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(item));
   }
 
-  public ResponseEntity<R> update(String id, U updateRequest) {
+  public ResponseEntity<R> update(Long id, U updateRequest) {
     updateRequest = beforeUpdate(id, updateRequest);
 
     T item = service.update(id, updateRequest);
@@ -69,7 +69,7 @@ public abstract class AbstractController<T extends AbstractModel, S extends Abst
 
   public void afterCreate(C createRequestDto,T item) { }
 
-  public U beforeUpdate(String id, U updateRequestDto) {
+  public U beforeUpdate(Long id, U updateRequestDto) {
     return updateRequestDto;
   }
 
