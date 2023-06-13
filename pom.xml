@@ -8,14 +8,17 @@
 		<version>3.0.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.aumones.tools</groupId>
 	<artifactId>communs</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
 	<name>communs</name>
 	<description>Application of communs classe and interface</description>
+
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,5 +66,31 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<name>GitHub Ousmane-ndiaye Apache Maven Packages</name>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/Ousmane-ndiaye/aumones-tools-communs</url>
+		</repository>
+	</distributionManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Deprecated
 public abstract class JpaAbstractController<T extends JpaAbstractModel, S extends AbstractSearchRequestDto,
     C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto<Long>> {
 

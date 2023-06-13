@@ -1,6 +1,6 @@
 package com.aumones.tools.communs.web.dto.response;
 
-public abstract class AbstractResponseDto<ID> {
+public abstract class AbstractResponseDto<ID> extends AuditMetadataResponse<ID> {
 
   protected ID id;
 
