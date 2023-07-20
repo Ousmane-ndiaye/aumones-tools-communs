@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface AbstractService<T extends AbstractModel, S extends AbstractSearchRequestDto,
+public interface AbstractService<T extends AbstractModel<?>, S extends AbstractSearchRequestDto,
     C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>> {
 
   List<T> list(S searchRequest);

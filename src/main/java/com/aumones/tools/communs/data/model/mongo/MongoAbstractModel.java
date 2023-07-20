@@ -4,7 +4,7 @@ import com.aumones.tools.communs.data.model.AbstractModel;
 import com.aumones.tools.communs.utils.designs.AuditMetadata;
 import org.springframework.data.annotation.Id;
 
-public class MongoAbstractModel extends AuditMetadata implements AbstractModel<String> {
+public class MongoAbstractModel extends AuditMetadata<String> implements AbstractModel<String> {
 
   @Id
   protected String id;

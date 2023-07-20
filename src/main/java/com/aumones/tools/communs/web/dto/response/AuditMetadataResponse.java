@@ -12,35 +12,29 @@ public class AuditMetadataResponse<ID> {
 
   protected ID modifiedByUserId;
 
-  public LocalDateTime getCreatedDate() {
-    return this.createdDate;
+  public AuditMetadataResponse() {
   }
 
-  public void setCreatedDate(LocalDateTime createdDate) {
+  public AuditMetadataResponse(LocalDateTime createdDate, LocalDateTime lastModifiedDate, ID createdByUserId, ID modifiedByUserId) {
     this.createdDate = createdDate;
+    this.lastModifiedDate = lastModifiedDate;
+    this.createdByUserId = createdByUserId;
+    this.modifiedByUserId = modifiedByUserId;
+  }
+
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
   }
 
   public LocalDateTime getLastModifiedDate() {
-    return this.lastModifiedDate;
-  }
-
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+    return lastModifiedDate;
   }
 
   public ID getCreatedByUserId() {
-    return this.createdByUserId;
-  }
-
-  public void setCreatedByUserId(ID createdByUserId) {
-    this.createdByUserId = createdByUserId;
+    return createdByUserId;
   }
 
   public ID getModifiedByUserId() {
-    return this.modifiedByUserId;
-  }
-
-  public void setModifiedByUserId(ID modifiedByUserId) {
-    this.modifiedByUserId = modifiedByUserId;
+    return modifiedByUserId;
   }
 }

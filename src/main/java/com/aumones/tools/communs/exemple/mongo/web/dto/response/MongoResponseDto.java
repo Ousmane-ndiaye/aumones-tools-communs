@@ -1,9 +1,9 @@
 package com.aumones.tools.communs.exemple.mongo.web.dto.response;
 
 import com.aumones.tools.communs.exemple.mongo.data.model.MongoModel;
-import com.aumones.tools.communs.web.dto.response.AbstractResponseDto;
+import com.aumones.tools.communs.web.dto.response.MongoAbstractResponseDto;
 
-public class MongoResponseDto extends AbstractResponseDto<String> {
+public class MongoResponseDto extends MongoAbstractResponseDto {
 
   private String name;
 
@@ -12,7 +12,7 @@ public class MongoResponseDto extends AbstractResponseDto<String> {
   public MongoResponseDto() {}
 
   public MongoResponseDto(MongoModel model) {
-    this.id = model.getId();
+    super(model);
     this.name = model.getName();
     this.age = model.getAge();
   }

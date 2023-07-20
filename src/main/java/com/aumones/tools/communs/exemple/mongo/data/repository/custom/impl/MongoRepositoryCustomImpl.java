@@ -23,6 +23,9 @@ public class MongoRepositoryCustomImpl extends MongoAbstractRepositoryCustomImpl
     if (searchRequest.getName() != null && !searchRequest.getName().isEmpty()) {
       listCriteria.add(Criteria.where("name").is(searchRequest.getName()));
     }
+    if (searchRequest.getAge() != null) {
+      listCriteria.add(Criteria.where("age").is(searchRequest.getAge()));
+    }
     return listCriteria;
   }
 

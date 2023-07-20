@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface AbstractRepository<T extends AbstractModel, S extends AbstractSearchRequestDto>
+public interface AbstractRepository<T extends AbstractModel<?>, S extends AbstractSearchRequestDto>
     extends AbstractRepositoryCustom<T, S> {
 }

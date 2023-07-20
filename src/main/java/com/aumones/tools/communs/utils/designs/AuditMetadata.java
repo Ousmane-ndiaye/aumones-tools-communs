@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
-public abstract class AuditMetadata {
+public abstract class AuditMetadata<ID> {
 
   @CreatedDate
   protected LocalDateTime createdDate;
@@ -17,10 +17,10 @@ public abstract class AuditMetadata {
   protected LocalDateTime lastModifiedDate;
 
   @CreatedBy
-  protected String createdByUserId;
+  protected ID createdByUserId;
 
   @LastModifiedBy
-  protected String modifiedByUserId;
+  protected ID modifiedByUserId;
 
   public LocalDateTime getCreatedDate() {
     return this.createdDate;
@@ -38,19 +38,19 @@ public abstract class AuditMetadata {
     this.lastModifiedDate = lastModifiedDate;
   }
 
-  public String getCreatedByUserId() {
+  public ID getCreatedByUserId() {
     return this.createdByUserId;
   }
 
-  public void setCreatedByUserId(String createdByUserId) {
+  public void setCreatedByUserId(ID createdByUserId) {
     this.createdByUserId = createdByUserId;
   }
 
-  public String getModifiedByUserId() {
+  public ID getModifiedByUserId() {
     return this.modifiedByUserId;
   }
 
-  public void setModifiedByUserId(String modifiedByUserId) {
+  public void setModifiedByUserId(ID modifiedByUserId) {
     this.modifiedByUserId = modifiedByUserId;
   }
 

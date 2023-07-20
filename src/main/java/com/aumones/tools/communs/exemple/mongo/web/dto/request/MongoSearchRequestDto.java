@@ -2,10 +2,12 @@ package com.aumones.tools.communs.exemple.mongo.web.dto.request;
 
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
 
+import java.util.Objects;
+
 public class MongoSearchRequestDto extends AbstractSearchRequestDto {
   private String name;
 
-  private int age;
+  private Integer age;
 
   public String getName() {
     return name;
@@ -15,11 +17,23 @@ public class MongoSearchRequestDto extends AbstractSearchRequestDto {
     this.name = name;
   }
 
-  public int getAge() {
+  public Integer getAge() {
     return age;
   }
 
-  public void setAge(int age) {
+  public void setAge(Integer age) {
     this.age = age;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof MongoSearchRequestDto that)) return false;
+    return Objects.equals(getName(), that.getName()) && Objects.equals(getAge(), that.getAge());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getName(), getAge());
   }
 }

@@ -5,6 +5,8 @@ import com.aumones.tools.communs.exemple.mongo.web.dto.request.MongoSearchReques
 import com.aumones.tools.communs.exemple.mongo.web.dto.request.MongoUpdateRequestDto;
 import com.aumones.tools.communs.exemple.mongo.web.dto.response.MongoResponseDto;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ public interface MongoApi {
 
   @GetMapping("/list")
   ResponseEntity<List<MongoResponseDto>> list(@Valid MongoSearchRequestDto productSearchRequest);
+
+  @GetMapping("/list/pageable")
+  ResponseEntity<Page<MongoResponseDto>> list(@Valid MongoSearchRequestDto productSearchRequest, Pageable page);
 
   @GetMapping("/single/{id}")
   ResponseEntity<MongoResponseDto> single(@PathVariable(value = "id") String id);

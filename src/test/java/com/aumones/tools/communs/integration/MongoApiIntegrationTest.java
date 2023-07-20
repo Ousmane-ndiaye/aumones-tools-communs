@@ -43,6 +43,6 @@ public class MongoApiIntegrationTest<T extends MongoAbstractModel, S extends Abs
   }
 
   private String createURLWithPort() {
-    return "http://localhost:" + port + "/api/orders";
+    return "http://localhost:" + port + "/api/mongos";
   }
 }

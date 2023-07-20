@@ -1,7 +1,7 @@
 package com.aumones.tools.communs.web.controller;
 
 import com.aumones.tools.communs.data.model.mongo.MongoAbstractModel;
-import com.aumones.tools.communs.service.AbstractService;
+import com.aumones.tools.communs.service.mongo.MongoAbstractService;
 import com.aumones.tools.communs.web.dto.request.AbstractCreateRequestDto;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
 import com.aumones.tools.communs.web.dto.request.AbstractUpdateRequestDto;
@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 public abstract class MongoAbstractController<T extends MongoAbstractModel, S extends AbstractSearchRequestDto,
     C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto<String>> {
 
-  protected AbstractService<T, S, C, U> service;
+  protected MongoAbstractService<T, S, C, U> service;
 
-  public MongoAbstractController(AbstractService<T, S, C, U> service) {
+  public MongoAbstractController(MongoAbstractService<T, S, C, U> service) {
     this.service = service;
   }
 
@@ -43,36 +43,16 @@ public abstract class MongoAbstractController<T extends MongoAbstractModel, S ex
   }
 
   public ResponseEntity<R> create(C createRequest) {
-    createRequest = beforeCreate(createRequest);
-
     T item = service.create(createRequest);
-
-    afterCreate(createRequest, item);
-
+    assert item != null;
     return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(item));
   }
 
   public ResponseEntity<R> update(String id, U updateRequest) {
-    updateRequest = beforeUpdate(id, updateRequest);
-
     T item = service.update(id, updateRequest);
-
-    afterUpdate(updateRequest, item);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(item));
+    assert item != null;
+    return ResponseEntity.status(HttpStatus.OK).body(toResponse(item));
   }
-
-  public C beforeCreate(C createRequestDto) {
-    return createRequestDto;
-  }
-
-  public void afterCreate(C createRequestDto,T item) { }
-
-  public U beforeUpdate(String id, U updateRequestDto) {
-    return updateRequestDto;
-  }
-
-  public void afterUpdate(U updateRequestDto, T item) { }
 
   public abstract R toResponse(T model);
 }

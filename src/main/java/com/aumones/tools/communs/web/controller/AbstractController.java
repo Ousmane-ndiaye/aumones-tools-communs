@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Deprecated
-public abstract class AbstractController<T extends AbstractModel, S extends AbstractSearchRequestDto,
-    C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto> {
+public abstract class AbstractController<T extends AbstractModel<?>, S extends AbstractSearchRequestDto,
+    C extends AbstractCreateRequestDto<T>, U extends AbstractUpdateRequestDto<T>, R extends AbstractResponseDto<?>> {
 
   protected AbstractService<T, S, C, U> service;
 
