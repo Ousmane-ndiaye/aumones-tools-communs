@@ -1,23 +1,18 @@
 package com.aumones.tools.communs.data.model.mongo;
 
 import com.aumones.tools.communs.data.model.AbstractModel;
-import com.aumones.tools.communs.utils.designs.AuditMetadata;
 import org.springframework.data.annotation.Id;
 
-public class MongoAbstractModel extends AuditMetadata<String> implements AbstractModel<String> {
-
-  @Id
-  protected String id;
-
-  public MongoAbstractModel() {}
+public class MongoAbstractModel extends AbstractModel<String> {
 
   @Override
+  @Id
   public String getId() {
-    return id;
+    return super.getId();
   }
 
   @Override
   public void setId(String id) {
-    this.id = id;
+    super.setId(id);
   }
 }

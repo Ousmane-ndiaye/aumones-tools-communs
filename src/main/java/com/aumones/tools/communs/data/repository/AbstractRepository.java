@@ -1,11 +1,10 @@
 package com.aumones.tools.communs.data.repository;
 
 import com.aumones.tools.communs.data.model.AbstractModel;
-import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.ListPagingAndSortingRepository;
 
+public interface AbstractRepository<ID, T extends AbstractModel<ID>> extends ListCrudRepository<T,ID>,
+    ListPagingAndSortingRepository<T, ID> {
 
-@Repository
-public interface AbstractRepository<T extends AbstractModel<?>, S extends AbstractSearchRequestDto>
-    extends AbstractRepositoryCustom<T, S> {
 }

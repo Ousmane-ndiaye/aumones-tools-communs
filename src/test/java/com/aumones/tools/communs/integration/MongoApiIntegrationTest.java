@@ -2,8 +2,8 @@ package com.aumones.tools.communs.integration;
 
 
 import com.aumones.tools.communs.data.model.mongo.MongoAbstractModel;
-import com.aumones.tools.communs.data.repository.mongo.MongoAbstractRepository;
-import com.aumones.tools.communs.service.mongo.MongoAbstractService;
+import com.aumones.tools.communs.exemple.data.repository.MongoExempleRepository;
+import com.aumones.tools.communs.exemple.service.MongoExempleService;
 import com.aumones.tools.communs.web.dto.request.AbstractCreateRequestDto;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
 import com.aumones.tools.communs.web.dto.request.AbstractUpdateRequestDto;
@@ -27,10 +27,10 @@ public class MongoApiIntegrationTest<T extends MongoAbstractModel, S extends Abs
   private TestRestTemplate restTemplate;
 
   @Autowired
-  private MongoAbstractRepository<T, S> mongoAbstractRepository;
+  private MongoExempleRepository repository;
 
   @Autowired
-  private MongoAbstractService<T, S, C, U> mongoAbstractService;
+  private MongoExempleService service;
 
   private static HttpHeaders headers;
 

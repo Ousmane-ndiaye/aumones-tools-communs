@@ -1,8 +1,16 @@
 package com.aumones.tools.communs.data.model;
 
-public interface AbstractModel<ID> {
+import com.aumones.tools.communs.utils.designs.AuditMetadata;
 
-  ID getId();
+public class AbstractModel<ID> extends AuditMetadata<ID> {
 
-  void setId(ID id);
+  protected ID id;
+
+  public ID getId() {
+    return id;
+  }
+
+  public void setId(ID id) {
+    this.id = id;
+  }
 }

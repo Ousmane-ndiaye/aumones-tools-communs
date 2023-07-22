@@ -1,15 +1,14 @@
 package com.aumones.tools.communs.web.dto.response;
 
-import java.time.LocalDateTime;
+import com.aumones.tools.communs.data.model.AbstractModel;
 
 public abstract class AbstractResponseDto<ID> extends AuditMetadataResponse<ID> {
 
   protected ID id;
 
-  public AbstractResponseDto() {}
-
-  public AbstractResponseDto(LocalDateTime createdDate, LocalDateTime lastModifiedDate, ID createdByUserId, ID modifiedByUserId) {
-    super(createdDate, lastModifiedDate, createdByUserId, modifiedByUserId);
+  public AbstractResponseDto(AbstractModel<ID> model) {
+    super(model.getCreatedDate(), model.getLastModifiedDate(), model.getCreatedByUserId(), model.getModifiedByUserId());
+    this.id = model.getId();
   }
 
   public ID getId() {

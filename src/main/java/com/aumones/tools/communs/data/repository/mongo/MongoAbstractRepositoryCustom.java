@@ -5,6 +5,6 @@ import com.aumones.tools.communs.data.repository.AbstractRepositoryCustom;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
 
 public interface MongoAbstractRepositoryCustom<T extends MongoAbstractModel, S extends AbstractSearchRequestDto>
-    extends AbstractRepositoryCustom<T, S> {
+    extends AbstractRepositoryCustom<String, T, S>, MongoAbstractRepository<T> {
 
 }

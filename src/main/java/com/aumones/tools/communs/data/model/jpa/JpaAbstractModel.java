@@ -1,7 +1,6 @@
 package com.aumones.tools.communs.data.model.jpa;
 
 import com.aumones.tools.communs.data.model.AbstractModel;
-import com.aumones.tools.communs.utils.designs.AuditMetadata;
 import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.Entity;
@@ -11,21 +10,17 @@ import jakarta.persistence.MappedSuperclass;
 
 @Entity
 @MappedSuperclass
-public class JpaAbstractModel extends AuditMetadata<Long> implements AbstractModel<Long> {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  protected Long id;
-
-  public JpaAbstractModel() {}
+public class JpaAbstractModel extends AbstractModel<Long> {
 
   @Override
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   public Long getId() {
-    return id;
+    return super.getId();
   }
 
   @Override
   public void setId(Long id) {
-    this.id = id;
+    super.setId(id);
   }
 }
