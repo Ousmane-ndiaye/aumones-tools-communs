@@ -9,23 +9,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.data.repository.NoRepositoryBean;
+
 import java.util.List;
 
+@NoRepositoryBean
 public abstract class JpaAbstractCustomQueryImpl<T extends JpaAbstractModel, S extends AbstractSearchRequestDto>
     implements AbstractCustomQuery<Long, T, S> {
 
-  @PersistenceContext
   protected EntityManager entityManager;
 
   protected Sort.Direction sortDirection = Sort.Direction.DESC;
 
   protected String sortField = "createdDate";
+
+  public JpaAbstractCustomQueryImpl(EntityManager entityManager) {
+    this.entityManager = entityManager;
+  }
 
   @Override
   public List<T> search(S searchRequest) {

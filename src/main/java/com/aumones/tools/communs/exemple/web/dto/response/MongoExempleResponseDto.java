@@ -1,6 +1,6 @@
 package com.aumones.tools.communs.exemple.web.dto.response;
 
-import com.aumones.tools.communs.exemple.data.model.MongoExempleModel;
+import com.aumones.tools.communs.exemple.data.mongo.model.MongoExempleModel;
 import com.aumones.tools.communs.web.dto.response.AbstractResponseDto;
 
 public class MongoExempleResponseDto extends AbstractResponseDto<String> {

@@ -1,8 +1,9 @@
-package com.aumones.tools.communs.exemple.data.repository.customQuery;
+package com.aumones.tools.communs.exemple.data.jpa.repository.customQuery;
 
 import com.aumones.tools.communs.data.repository.jpa.JpaAbstractCustomQueryImpl;
-import com.aumones.tools.communs.exemple.data.model.JpaExempleModel;
+import com.aumones.tools.communs.exemple.data.jpa.model.JpaExempleModel;
 import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -12,10 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class JpaExempleCustomQueryImpl extends JpaAbstractCustomQueryImpl<JpaExempleModel, ExempleSearchRequestDto> {
+public class JpaExempleCustomQueryImpl extends JpaAbstractCustomQueryImpl<JpaExempleModel, ExempleSearchRequestDto>
+    implements JpaExempleCustomQuery {
+
+  public JpaExempleCustomQueryImpl(EntityManager entityManager) {
+    super(entityManager);
+  }
 
   @Override
-  public List<Predicate> setListPredicates(ExempleSearchRequestDto searchRequest, CriteriaBuilder criteriaBuilder, Root<JpaExempleModel> root) {
+  public List<Predicate> setListPredicates(ExempleSearchRequestDto searchRequest, CriteriaBuilder criteriaBuilder,
+                                           Root<JpaExempleModel> root) {
     List<Predicate> listCriteria = new ArrayList<>();
     if (searchRequest.getName() != null && !searchRequest.getName().isEmpty()) {
       listCriteria.add(criteriaBuilder.equal(root.get("name"), searchRequest.getName()));

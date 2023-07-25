@@ -1,7 +1,7 @@
 package com.aumones.tools.communs.unit.controller;
 
-import com.aumones.tools.communs.exemple.data.model.MongoExempleModel;
-import com.aumones.tools.communs.exemple.service.MongoExempleService;
+import com.aumones.tools.communs.exemple.data.mongo.model.MongoExempleModel;
+import com.aumones.tools.communs.exemple.service.mongo.MongoExempleService;
 import com.aumones.tools.communs.exemple.web.controller.MongoExempleController;
 import com.aumones.tools.communs.exemple.web.dto.request.MongoExempleCreateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto;

@@ -1,7 +1,7 @@
 package com.aumones.tools.communs.exemple.web.controller;
 
-import com.aumones.tools.communs.exemple.data.model.JpaExempleModel;
-import com.aumones.tools.communs.exemple.service.JpaExempleService;
+import com.aumones.tools.communs.exemple.data.jpa.model.JpaExempleModel;
+import com.aumones.tools.communs.exemple.service.jpa.JpaExempleService;
 import com.aumones.tools.communs.exemple.web.api.JpaExempleApi;
 import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.JpaExempleCreateRequestDto;

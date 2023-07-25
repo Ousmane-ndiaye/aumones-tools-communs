@@ -1,6 +1,6 @@
 package com.aumones.tools.communs.exemple.web.dto.request;
 
-import com.aumones.tools.communs.exemple.data.model.MongoExempleModel;
+import com.aumones.tools.communs.exemple.data.mongo.model.MongoExempleModel;
 import com.aumones.tools.communs.web.dto.request.AbstractCreateRequestDto;
 
 import java.util.Objects;

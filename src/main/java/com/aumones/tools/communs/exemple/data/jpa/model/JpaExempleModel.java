@@ -1,8 +1,10 @@
-package com.aumones.tools.communs.exemple.data.model;
+package com.aumones.tools.communs.exemple.data.jpa.model;
 
 import com.aumones.tools.communs.data.model.jpa.JpaAbstractModel;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+@Entity
 @Table(name = "exemple_jpa")
 public class JpaExempleModel extends JpaAbstractModel {
 
@@ -41,7 +43,7 @@ public class JpaExempleModel extends JpaAbstractModel {
 
   @Override
   public String toString() {
-    return "JpaExempleModel{" +
+    return "MongoExempleModel{" +
         "id='" + id + '\'' +
         "name='" + name + '\'' +
         ", age=" + age +

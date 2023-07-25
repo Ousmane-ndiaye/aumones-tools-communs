@@ -1,6 +1,6 @@
 package com.aumones.tools.communs.exemple.web.dto.request;
 
-import com.aumones.tools.communs.exemple.data.model.JpaExempleModel;
+import com.aumones.tools.communs.exemple.data.jpa.model.JpaExempleModel;
 import com.aumones.tools.communs.web.dto.request.AbstractUpdateRequestDto;
 
 public class JpaExempleUpdateRequestDto extends AbstractUpdateRequestDto<JpaExempleModel> {

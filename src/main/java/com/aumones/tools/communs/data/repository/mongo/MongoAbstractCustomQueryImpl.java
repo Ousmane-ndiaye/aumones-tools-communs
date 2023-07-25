@@ -3,26 +3,30 @@ package com.aumones.tools.communs.data.repository.mongo;
 import com.aumones.tools.communs.data.model.mongo.MongoAbstractModel;
 import com.aumones.tools.communs.data.repository.AbstractCustomQuery;
 import com.aumones.tools.communs.web.dto.request.AbstractSearchRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
+@NoRepositoryBean
 public abstract class MongoAbstractCustomQueryImpl<T extends MongoAbstractModel, S extends AbstractSearchRequestDto>
     implements AbstractCustomQuery<String, T, S> {
 
-  @Autowired
   protected MongoTemplate mongoTemplate;
 
   protected Sort.Direction sortDirection = Sort.Direction.DESC;
 
   protected String sortField = "createdDate";
+
+  public MongoAbstractCustomQueryImpl(MongoTemplate mongoTemplate) {
+    this.mongoTemplate = mongoTemplate;
+  }
 
   @Override
   public List<T> search(S searchRequest) {

@@ -5,14 +5,18 @@ import org.springframework.data.annotation.Id;
 
 public class MongoAbstractModel extends AbstractModel<String> {
 
-  @Override
   @Id
+  protected String id;
+
+  public MongoAbstractModel() {}
+
+  @Override
   public String getId() {
-    return super.getId();
+    return this.id;
   }
 
   @Override
   public void setId(String id) {
-    super.setId(id);
+    this.id = id;
   }
 }

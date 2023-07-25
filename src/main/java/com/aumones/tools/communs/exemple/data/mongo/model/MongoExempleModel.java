@@ -1,4 +1,4 @@
-package com.aumones.tools.communs.exemple.data.model;
+package com.aumones.tools.communs.exemple.data.mongo.model;
 
 import com.aumones.tools.communs.data.model.mongo.MongoAbstractModel;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,13 +1,13 @@
 package com.aumones.tools.communs.exemple.web.dto.request;
 
-import com.aumones.tools.communs.exemple.data.model.JpaExempleModel;
+import com.aumones.tools.communs.exemple.data.jpa.model.JpaExempleModel;
 import com.aumones.tools.communs.web.dto.request.AbstractCreateRequestDto;
 
 import java.util.Objects;
 
 public class JpaExempleCreateRequestDto extends AbstractCreateRequestDto<JpaExempleModel> {
 
-  // @UniqueField(document = MongoExempleModel.class, field = "name", message = "name already exist")
+  // @UniqueField(document = JpaExempleModel.class, field = "name", message = "name already exist")
   private String name;
 
   private int age;

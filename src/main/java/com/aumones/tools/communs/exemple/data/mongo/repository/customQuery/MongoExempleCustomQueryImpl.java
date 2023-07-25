@@ -1,8 +1,9 @@
-package com.aumones.tools.communs.exemple.data.repository.customQuery;
+package com.aumones.tools.communs.exemple.data.mongo.repository.customQuery;
 
 import com.aumones.tools.communs.data.repository.mongo.MongoAbstractCustomQueryImpl;
-import com.aumones.tools.communs.exemple.data.model.MongoExempleModel;
+import com.aumones.tools.communs.exemple.data.mongo.model.MongoExempleModel;
 import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class MongoExempleCustomQueryImpl extends MongoAbstractCustomQueryImpl<MongoExempleModel, ExempleSearchRequestDto> {
+public class MongoExempleCustomQueryImpl extends MongoAbstractCustomQueryImpl<MongoExempleModel, ExempleSearchRequestDto>
+    implements MongoExempleCustomQuery {
+
+  public MongoExempleCustomQueryImpl(MongoTemplate mongoTemplate) {
+    super(mongoTemplate);
+  }
 
   @Override
   public List<Criteria> setListCriteria(ExempleSearchRequestDto searchRequest) {
