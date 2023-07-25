@@ -1,8 +1,8 @@
 package com.aumones.tools.communs.unit.service;
 
-import com.aumones.tools.communs.exemple.data.model.JpaExempleModel;
-import com.aumones.tools.communs.exemple.data.repository.JpaExempleRepository;
-import com.aumones.tools.communs.exemple.service.JpaExempleServiceImpl;
+import com.aumones.tools.communs.exemple.data.jpa.model.JpaExempleModel;
+import com.aumones.tools.communs.exemple.data.jpa.repository.JpaExempleRepository;
+import com.aumones.tools.communs.exemple.service.jpa.JpaExempleServiceImpl;
 import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.JpaExempleCreateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.JpaExempleUpdateRequestDto;
