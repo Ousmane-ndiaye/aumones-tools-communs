@@ -1,11 +1,13 @@
-package com.aumones.tools.communs.unit.service;
+package com.aumones.tools.communs.tests.service;
 
 import com.aumones.tools.communs.data.model.AbstractModel;
 import com.aumones.tools.communs.data.repository.AbstractRepository;
 import com.aumones.tools.communs.service.AbstractCRUDService;
 import com.aumones.tools.communs.web.dto.request.AbstractCreateRequestDto;
 import com.aumones.tools.communs.web.dto.request.AbstractUpdateRequestDto;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +15,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public abstract class AbstractCRUDServiceUnitTest<ID, T extends AbstractModel<ID>, C extends AbstractCreateRequestDto<T>,
     U extends AbstractUpdateRequestDto<T>> {
@@ -37,73 +35,68 @@ public abstract class AbstractCRUDServiceUnitTest<ID, T extends AbstractModel<ID
 
   public abstract void assertModelsEquals(T expected, T actual);
 
-  @Test
   public void testList() {
     // Étape 1 : Préparation des données de test
-    when(getRepository().findAll()).thenReturn(getModels());
+    Mockito.when(getRepository().findAll()).thenReturn(getModels());
 
     // Étape 2 : Exécution de la méthode à tester
     List<T> modelList = getService().list();
 
     // Étape 3 : Vérification des résultats
-    assertEquals(modelList.size(), getModels().size());
+    Assertions.assertEquals(modelList.size(), getModels().size());
     for (int i = 0; i < getModels().size(); i++) {
       assertModelsEquals(modelList.get(i), getModels().get(i));
     }
   }
 
-  @Test
   public void testListWithPageable() {
     // Étape 1 : Préparation des données de test
     int pageSize = 10;
     Pageable pageable = PageRequest.of(0, pageSize);
     Page<T> page = new PageImpl<>(getModels(), pageable, getModels().size());
-    when(getRepository().findAll(pageable)).thenReturn(page);
+    Mockito.when(getRepository().findAll(pageable)).thenReturn(page);
 
     // Étape 2 : Exécution de la méthode à tester
     Page<T> modelPage = getService().list(pageable);
 
     // Étape 3 : Vérification des résultats
-    assertEquals(getModels().size(), modelPage.getTotalElements());
-    assertEquals(pageSize, modelPage.getSize());
+    Assertions.assertEquals(getModels().size(), modelPage.getTotalElements());
+    Assertions.assertEquals(pageSize, modelPage.getSize());
 
     List<T> modelList = modelPage.getContent();
-    assertEquals(getModels().size(), modelList.size());
+    Assertions.assertEquals(getModels().size(), modelList.size());
     for (int i = 0; i < modelList.size(); i++) {
       assertModelsEquals(getModels().get(i), modelList.get(i));
     }
   }
 
-  @Test
   public void testGet() {
     // Étape 1 : Préparation des données de test
     T data = getModels().get(0);
-    when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.of(data));
+    Mockito.when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.of(data));
 
     // Étape 2 : Exécution de la méthode à tester
     T model = getService().get(getModels().get(0).getId());
 
     // Étape 3 : Vérification des résultats
-    assertNotEquals(model, null);
+    Assertions.assertNotEquals(model, null);
     assertModelsEquals(model, getModels().get(0));
   }
 
-  @Test
   public void testGetNull() {
     // Étape 1 : Préparation des données de test
-    when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.empty());
+    Mockito.when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.empty());
 
     // Étape 2 : Exécution de la méthode à tester
     T model = getService().get(getModels().get(0).getId());
 
     // Étape 3 : Vérification des résultats
-    assertNull(model);
+    Assertions.assertNull(model);
   }
 
-  @Test
   public void testCreate() {
     // Étape 1 : Préparation des données de test
-    when(getRepository().save(any(getClassName()))).thenAnswer(invocation -> {
+    Mockito.when(getRepository().save(ArgumentMatchers.any(getClassName()))).thenAnswer(invocation -> {
       T model = invocation.getArgument(0);
       model.setId(getModels().get(0).getId());
       return model;
@@ -114,16 +107,15 @@ public abstract class AbstractCRUDServiceUnitTest<ID, T extends AbstractModel<ID
     T modelCreated = getService().create(requestDto);
 
     // Étape 3 : Vérification des résultats
-    assertNotNull(modelCreated);
+    Assertions.assertNotNull(modelCreated);
     assertModelsEquals(modelCreated, getModels().get(0));
   }
 
-  @Test
   public void testUpdate() {
     // Étape 1 : Préparation des données de test
     U requestDto = buildUpdateRequest();
     T currentModel = getModels().get(0);
-    when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.of(currentModel));
+    Mockito.when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.of(currentModel));
 
     // Étape 2 : Exécution de la méthode à tester
     T modelUpdated = getService().update(getModels().get(0).getId(), requestDto);

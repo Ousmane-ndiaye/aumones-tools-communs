@@ -6,7 +6,9 @@ import com.aumones.tools.communs.exemple.service.mongo.MongoExempleServiceImpl;
 import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.MongoExempleCreateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.MongoExempleUpdateRequestDto;
+import com.aumones.tools.communs.tests.service.AbstractCRUDAndSearchServiceUnitTest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -76,5 +78,53 @@ public class MongoExempleServiceImplUnitTest extends AbstractCRUDAndSearchServic
     assertEquals(expected.getId(), actual.getId());
     assertEquals(expected.getName(), actual.getName());
     assertEquals(expected.getAge(), actual.getAge());
+  }
+
+  @Test
+  @Override
+  public void testListWithSearch() {
+    super.testListWithSearch();
+  }
+
+  @Test
+  @Override
+  public void testListWithSearchAndPageable() {
+    super.testListWithSearchAndPageable();
+  }
+
+  @Test
+  @Override
+  public void testList() {
+    super.testList();
+  }
+
+  @Test
+  @Override
+  public void testListWithPageable() {
+    super.testListWithPageable();
+  }
+
+  @Test
+  @Override
+  public void testGet() {
+    super.testGet();
+  }
+
+  @Test
+  @Override
+  public void testGetNull() {
+    super.testGetNull();
+  }
+
+  @Test
+  @Override
+  public void testCreate() {
+    super.testCreate();
+  }
+
+  @Test
+  @Override
+  public void testUpdate() {
+    super.testUpdate();
   }
 }

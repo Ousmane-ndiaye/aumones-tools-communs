@@ -7,6 +7,7 @@ import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto
 import com.aumones.tools.communs.exemple.web.dto.request.MongoExempleCreateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.MongoExempleUpdateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.response.MongoExempleResponseDto;
+import com.aumones.tools.communs.tests.controller.AbstractCRUDAndSearchControllerUnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,6 +73,11 @@ public class MongoExempleControllerUnitTest extends AbstractCRUDAndSearchControl
   @Override
   public MongoExempleUpdateRequestDto buildUpdateRequest() {
     return new MongoExempleUpdateRequestDto("Peter Jefferson", 25);
+  }
+
+  @Override
+  public MongoExempleModel buildCreatedResult() {
+    return new MongoExempleModel("789L", "Peter Jefferson", 25);
   }
 
   @Override

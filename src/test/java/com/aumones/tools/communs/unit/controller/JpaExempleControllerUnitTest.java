@@ -7,6 +7,7 @@ import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto
 import com.aumones.tools.communs.exemple.web.dto.request.JpaExempleCreateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.JpaExempleUpdateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.response.JpaExempleResponseDto;
+import com.aumones.tools.communs.tests.controller.AbstractCRUDAndSearchControllerUnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,12 +67,17 @@ public class JpaExempleControllerUnitTest extends AbstractCRUDAndSearchControlle
 
   @Override
   public JpaExempleCreateRequestDto buildCreateRequest() {
-    return new JpaExempleCreateRequestDto(models.get(0).getName(), models.get(0).getAge());
+    return new JpaExempleCreateRequestDto("Peter Jefferson", 25);
   }
 
   @Override
   public JpaExempleUpdateRequestDto buildUpdateRequest() {
     return new JpaExempleUpdateRequestDto("Peter Jefferson", 25);
+  }
+
+  @Override
+  public JpaExempleModel buildCreatedResult() {
+    return new JpaExempleModel(789L, "Peter Jefferson", 25);
   }
 
   @Override
