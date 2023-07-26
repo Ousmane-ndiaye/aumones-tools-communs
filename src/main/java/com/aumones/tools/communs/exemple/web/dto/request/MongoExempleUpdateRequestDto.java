@@ -3,6 +3,8 @@ package com.aumones.tools.communs.exemple.web.dto.request;
 import com.aumones.tools.communs.exemple.data.mongo.model.MongoExempleModel;
 import com.aumones.tools.communs.web.dto.request.AbstractUpdateRequestDto;
 
+import java.util.Objects;
+
 public class MongoExempleUpdateRequestDto extends AbstractUpdateRequestDto<MongoExempleModel> {
 
   private String name;
@@ -35,5 +37,17 @@ public class MongoExempleUpdateRequestDto extends AbstractUpdateRequestDto<Mongo
     model.setName(name);
     model.setAge(age);
     return model;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof MongoExempleUpdateRequestDto that)) return false;
+    return getAge() == that.getAge() && getName().equals(that.getName());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getName(), getAge());
   }
 }

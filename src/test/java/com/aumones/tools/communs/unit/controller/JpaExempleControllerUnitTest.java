@@ -6,14 +6,13 @@ import com.aumones.tools.communs.exemple.web.controller.JpaExempleController;
 import com.aumones.tools.communs.exemple.web.dto.request.ExempleSearchRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.JpaExempleCreateRequestDto;
 import com.aumones.tools.communs.exemple.web.dto.request.JpaExempleUpdateRequestDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.aumones.tools.communs.exemple.web.dto.response.JpaExempleResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -21,20 +20,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(JpaExempleController.class)
-public class JpaExempleControllerUnitTest {
+public class JpaExempleControllerUnitTest extends AbstractCRUDAndSearchControllerUnitTest<Long, JpaExempleModel,
+    ExempleSearchRequestDto, JpaExempleCreateRequestDto, JpaExempleUpdateRequestDto, JpaExempleResponseDto> {
 
   @Autowired
   private MockMvc mockMvc;
@@ -42,107 +35,91 @@ public class JpaExempleControllerUnitTest {
   @MockBean
   private JpaExempleService service;
 
-  private List<JpaExempleModel> models;
+  private final List<JpaExempleModel> models = Arrays.asList(
+      new JpaExempleModel(123L, "John Doe", 40),
+      new JpaExempleModel(456L, "Jane Smith", 35)
+  );
+
+  @Override
+  public JpaExempleService getService() {
+    return service;
+  }
+
+  @Override
+  public List<JpaExempleModel> getModels() {
+    return this.models;
+  }
+
+  @Override
+  public ExempleSearchRequestDto buildSearchRequest() {
+    ExempleSearchRequestDto exempleSearchRequest = new ExempleSearchRequestDto();
+    exempleSearchRequest.setName(models.get(0).getName());
+    return exempleSearchRequest;
+  }
+
+  @Override
+  public MultiValueMap<String, String> buildRequestParams() {
+    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("name", models.get(0).getName());
+    return requestParams;
+  }
+
+  @Override
+  public JpaExempleCreateRequestDto buildCreateRequest() {
+    return new JpaExempleCreateRequestDto(models.get(0).getName(), models.get(0).getAge());
+  }
+
+  @Override
+  public JpaExempleUpdateRequestDto buildUpdateRequest() {
+    return new JpaExempleUpdateRequestDto("Peter Jefferson", 25);
+  }
+
+  @Override
+  public JpaExempleModel buildUpdatedResult(Long id) {
+    return new JpaExempleModel(id, "Peter Jefferson", 25);
+  }
+
+  @Override
+  public void assertResponseDto(ResultActions result, int index, JpaExempleModel model) throws Exception {
+    result.andExpect(jsonPath("$[" + index + "].id").value(model.getId()))
+        .andExpect(jsonPath("$[" + index + "].name").value(model.getName()))
+        .andExpect(jsonPath("$[" + index + "].age").value(model.getAge()));
+  }
+
+  @Override
+  public void assertResponseDto(ResultActions result, JpaExempleModel model) throws Exception {
+    result.andExpect(jsonPath("$.id").value(model.getId()))
+        .andExpect(jsonPath("$.name").value(model.getName()))
+        .andExpect(jsonPath("$.age").value(model.getAge()));
+  }
+
+  @Override
+  public void assertResponsePageableDto(ResultActions result, int index, JpaExempleModel model) throws Exception {
+    result.andExpect(jsonPath("$.content[" + index + "].id").value(model.getId()))
+        .andExpect(jsonPath("$.content[" + index + "].name").value(model.getName()))
+        .andExpect(jsonPath("$.content[" + index + "].age").value(model.getAge()));
+  }
 
   @BeforeEach
-  public void setup() {
-    this.models = Arrays.asList(
-        new JpaExempleModel(123L, "John Doe", 40),
-        new JpaExempleModel(456L, "Jane Smith", 35)
-    );
+  public void setup() {}
+
+  @Test
+  public void testListWithSearch() throws Exception {
+    super.testListWithSearch("/api/exemple-jpa/list");
   }
 
   @Test
-  public void testList() throws Exception {
-    // Étape 1 : Préparation des données de test
-    when(service.list(any(ExempleSearchRequestDto.class))).thenReturn(models);
-
-    // Étape 2 : Exécution de l'api à tester
-    ResultActions result = mockMvc.perform(get("/api/exemple-jpa/list"))
-        .andDo(print());
-
-    // Étape 3 : Vérification des résultats
-    result.andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].id").value(models.get(0).getId()))
-        .andExpect(jsonPath("$[0].name").value(models.get(0).getName()))
-        .andExpect(jsonPath("$[0].age").value(models.get(0).getAge()))
-        .andExpect(jsonPath("$[1].id").value(models.get(1).getId()))
-        .andExpect(jsonPath("$[1].name").value(models.get(1).getName()))
-        .andExpect(jsonPath("$[1].age").value(models.get(1).getAge()));
-  }
-
-  @Test
-  public void testListWithFilter() throws Exception {
-    // Étape 1 : Préparation des données de test
-    ExempleSearchRequestDto searchRequest = new ExempleSearchRequestDto();
-    searchRequest.setName(models.get(0).getName());
-
-    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-    requestParams.add("name", searchRequest.getName());
-
-    when(service.list(eq(searchRequest))).thenReturn(Collections.singletonList(models.get(0)));
-
-    // Étape 2 : Exécution de l'api à tester
-    ResultActions result = mockMvc.perform(get("/api/exemple-jpa/list")
-            .queryParams(requestParams))
-        .andDo(print());
-
-    // Étape 3 : Vérification des résultats
-    result.andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].id").value(models.get(0).getId()))
-        .andExpect(jsonPath("$[0].name").value(models.get(0).getName()))
-        .andExpect(jsonPath("$[0].age").value(models.get(0).getAge()));
+  public void testListWithSearchAndPageable() throws Exception {
+    super.testListWithSearchAndPageable("/api/exemple-jpa/list/pageable");
   }
 
   @Test
   public void testCreate() throws Exception {
-    // Étape 1 : Préparation des données de test
-    JpaExempleCreateRequestDto createRequest = new JpaExempleCreateRequestDto(models.get(0).getName(), models.get(0).getAge());
-    when(service.create(createRequest)).thenReturn(models.get(0));
-
-    // Étape 2 : Exécution de l'api à tester
-    ObjectMapper objectMapper = new ObjectMapper();
-    String requestBody = objectMapper.writeValueAsString(createRequest);
-
-    ResultActions result = mockMvc.perform(post("/api/exemple-jpa/create")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(requestBody))
-        .andDo(print());
-
-    // Étape 3 : Vérification des résultats
-    result.andExpect(status().isCreated())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.name").value(createRequest.getName()))
-        .andExpect(jsonPath("$.age").value(createRequest.getAge()));
+    super.testCreate("/api/exemple-jpa/create");
   }
 
   @Test
   public void testUpdate() throws Exception {
-    // Étape 1 : Préparation des données de test
-    JpaExempleUpdateRequestDto updateRequest = new JpaExempleUpdateRequestDto("Peter Jefferson", 25);
-    when(service.update(eq(models.get(0).getId()), any(JpaExempleUpdateRequestDto.class))).thenReturn(
-        new JpaExempleModel(models.get(0).getId(), updateRequest.getName(), updateRequest.getAge()));
-
-    // Étape 2 : Exécution de l'api à tester
-    ObjectMapper objectMapper = new ObjectMapper();
-    String requestBody = objectMapper.writeValueAsString(updateRequest);
-
-    ResultActions result = mockMvc.perform(put("/api/exemple-jpa/update/"+models.get(0).getId())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(requestBody))
-        .andDo(print());
-
-    // Étape 3 : Vérification des résultats
-    result.andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.id").value(models.get(0).getId()))
-        .andExpect(jsonPath("$.name").value(updateRequest.getName()))
-        .andExpect(jsonPath("$.age").value(updateRequest.getAge()));
+    super.testUpdate("/api/exemple-jpa/update/"+models.get(0).getId(), models.get(0).getId());
   }
 }
