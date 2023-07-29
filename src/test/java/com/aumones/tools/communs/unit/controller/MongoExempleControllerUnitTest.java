@@ -52,40 +52,6 @@ public class MongoExempleControllerUnitTest extends AbstractCRUDAndSearchControl
   }
 
   @Override
-  public ExempleSearchRequestDto buildSearchRequest() {
-    ExempleSearchRequestDto exempleSearchRequest = new ExempleSearchRequestDto();
-    exempleSearchRequest.setName(models.get(0).getName());
-    return exempleSearchRequest;
-  }
-
-  @Override
-  public MultiValueMap<String, String> buildRequestParams() {
-    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-    requestParams.add("name", models.get(0).getName());
-    return requestParams;
-  }
-
-  @Override
-  public MongoExempleCreateRequestDto buildCreateRequest() {
-    return new MongoExempleCreateRequestDto(models.get(0).getName(), models.get(0).getAge());
-  }
-
-  @Override
-  public MongoExempleUpdateRequestDto buildUpdateRequest() {
-    return new MongoExempleUpdateRequestDto("Peter Jefferson", 25);
-  }
-
-  @Override
-  public MongoExempleModel buildCreatedResult() {
-    return new MongoExempleModel("789L", "Peter Jefferson", 25);
-  }
-
-  @Override
-  public MongoExempleModel buildUpdatedResult(String id) {
-    return new MongoExempleModel(id, "Peter Jefferson", 25);
-  }
-
-  @Override
   public void assertResponseDto(ResultActions result, int index, MongoExempleModel model) throws Exception {
     result.andExpect(jsonPath("$[" + index + "].id").value(model.getId()))
         .andExpect(jsonPath("$[" + index + "].name").value(model.getName()))
@@ -111,21 +77,39 @@ public class MongoExempleControllerUnitTest extends AbstractCRUDAndSearchControl
 
   @Test
   public void testListWithSearch() throws Exception {
-    super.testListWithSearch("/api/exemple-mongo/list");
+    ExempleSearchRequestDto exempleSearchRequest = new ExempleSearchRequestDto();
+    exempleSearchRequest.setName(models.get(0).getName());
+    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("name", models.get(0).getName());
+
+    super.testListWithSearch("/api/exemple-mongo/list", exempleSearchRequest, requestParams);
   }
 
   @Test
   public void testListWithSearchAndPageable() throws Exception {
-    super.testListWithSearchAndPageable("/api/exemple-mongo/list/pageable");
+    ExempleSearchRequestDto exempleSearchRequest = new ExempleSearchRequestDto();
+    exempleSearchRequest.setName(models.get(0).getName());
+    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("name", models.get(0).getName());
+    super.testListWithSearchAndPageable("/api/exemple-mongo/list/pageable", exempleSearchRequest, requestParams,
+        10, 0);
   }
 
   @Test
   public void testCreate() throws Exception {
-    super.testCreate("/api/exemple-mongo/create");
+    MongoExempleCreateRequestDto createRequest = new MongoExempleCreateRequestDto(models.get(0).getName(),
+        models.get(0).getAge());
+    MongoExempleModel expectedItem = new MongoExempleModel(models.get(0).getId(),
+        "Peter Jefferson", 25);
+    super.testCreate("/api/exemple-mongo/create", createRequest, expectedItem);
   }
 
   @Test
   public void testUpdate() throws Exception {
-    super.testUpdate("/api/exemple-mongo/update/"+models.get(0).getId(), models.get(0).getId());
+    String endpoint = "/api/exemple-mongo/update/"+models.get(0).getId();
+    MongoExempleUpdateRequestDto updateRequest = new MongoExempleUpdateRequestDto("Peter Jefferson", 25);
+    MongoExempleModel expectedItem = new MongoExempleModel(models.get(0).getId(),
+        "Peter Jefferson", 25);
+    super.testUpdate(endpoint, models.get(0).getId(), updateRequest, expectedItem);
   }
 }

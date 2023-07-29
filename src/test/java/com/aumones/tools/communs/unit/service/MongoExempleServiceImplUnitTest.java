@@ -49,28 +49,12 @@ public class MongoExempleServiceImplUnitTest extends AbstractCRUDAndSearchServic
     return this.models;
   }
 
-  @Override
   @BeforeEach
   public void setup() {}
 
   @Override
   public Class<MongoExempleModel> getClassName() {
     return MongoExempleModel.class;
-  }
-
-  @Override
-  public MongoExempleCreateRequestDto buildCreateRequest() {
-    return new MongoExempleCreateRequestDto(models.get(0).getName(), models.get(0).getAge());
-  }
-
-  @Override
-  public MongoExempleUpdateRequestDto buildUpdateRequest() {
-    return new MongoExempleUpdateRequestDto("Peter Jefferson", 25);
-  }
-
-  @Override
-  public ExempleSearchRequestDto buildSearchRequest() {
-    return new ExempleSearchRequestDto();
   }
 
   @Override
@@ -81,50 +65,48 @@ public class MongoExempleServiceImplUnitTest extends AbstractCRUDAndSearchServic
   }
 
   @Test
-  @Override
   public void testListWithSearch() {
-    super.testListWithSearch();
+    ExempleSearchRequestDto searchRequest = new ExempleSearchRequestDto();
+    super.testListWithSearch(searchRequest);
   }
 
   @Test
-  @Override
   public void testListWithSearchAndPageable() {
-    super.testListWithSearchAndPageable();
+    ExempleSearchRequestDto searchRequest = new ExempleSearchRequestDto();
+    super.testListWithSearchAndPageable(searchRequest, 10, 0);
   }
 
   @Test
-  @Override
   public void testList() {
     super.testList();
   }
 
   @Test
-  @Override
   public void testListWithPageable() {
-    super.testListWithPageable();
+    super.testListWithPageable(10, 0);
   }
 
   @Test
-  @Override
   public void testGet() {
-    super.testGet();
+    super.testGet(models.get(0).getId());
   }
 
   @Test
-  @Override
   public void testGetNull() {
     super.testGetNull();
   }
 
   @Test
-  @Override
   public void testCreate() {
-    super.testCreate();
+    MongoExempleCreateRequestDto createRequest = new MongoExempleCreateRequestDto(models.get(0).getName(),
+        models.get(0).getAge());
+    super.testCreate(createRequest, models.get(0));
   }
 
   @Test
-  @Override
   public void testUpdate() {
-    super.testUpdate();
+    MongoExempleUpdateRequestDto updateRequest = new MongoExempleUpdateRequestDto("Peter Jefferson", 25);
+    super.testUpdate(models.get(0).getId(), updateRequest, new MongoExempleModel(models.get(0).getId(),
+        "Peter Jefferson", 25));
   }
 }

@@ -23,12 +23,8 @@ public abstract class AbstractCRUDAndSearchServiceUnitTest<ID, T extends Abstrac
 
   public abstract AbstractCRUDAndSearchService<ID, T, S, C, U> getService();
 
-
-  public abstract S buildSearchRequest();
-
-  public void testListWithSearch() {
+  public void testListWithSearch(S searchRequest) {
     // Étape 1 : Préparation des données de test
-    S searchRequest = buildSearchRequest();
     Mockito.when(getRepository().search(ArgumentMatchers.eq(searchRequest))).thenReturn(getModels());
 
     // Étape 2 : Exécution de la méthode à tester
@@ -41,11 +37,9 @@ public abstract class AbstractCRUDAndSearchServiceUnitTest<ID, T extends Abstrac
     }
   }
 
-  public void testListWithSearchAndPageable() {
+  public void testListWithSearchAndPageable(S searchRequest, int pageSize, int currentPage) {
     // Étape 1 : Préparation des données de test
-    S searchRequest = buildSearchRequest();
-    int pageSize = 10;
-    Pageable pageable = PageRequest.of(0, pageSize);
+    Pageable pageable = PageRequest.of(currentPage, pageSize);
     Page<T> page = new PageImpl<>(getModels(), pageable, getModels().size());
     Mockito.when(getRepository().search(ArgumentMatchers.eq(searchRequest), ArgumentMatchers.eq(pageable))).thenReturn(page);
 

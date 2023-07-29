@@ -25,13 +25,7 @@ public abstract class AbstractCRUDServiceUnitTest<ID, T extends AbstractModel<ID
 
   public abstract List<T> getModels();
 
-  public abstract void setup();
-
   public abstract Class<T> getClassName();
-
-  public abstract C buildCreateRequest();
-
-  public abstract U buildUpdateRequest();
 
   public abstract void assertModelsEquals(T expected, T actual);
 
@@ -49,10 +43,9 @@ public abstract class AbstractCRUDServiceUnitTest<ID, T extends AbstractModel<ID
     }
   }
 
-  public void testListWithPageable() {
+  public void testListWithPageable(int pageSize, int currentPage) {
     // Étape 1 : Préparation des données de test
-    int pageSize = 10;
-    Pageable pageable = PageRequest.of(0, pageSize);
+    Pageable pageable = PageRequest.of(currentPage, pageSize);
     Page<T> page = new PageImpl<>(getModels(), pageable, getModels().size());
     Mockito.when(getRepository().findAll(pageable)).thenReturn(page);
 
@@ -70,17 +63,18 @@ public abstract class AbstractCRUDServiceUnitTest<ID, T extends AbstractModel<ID
     }
   }
 
-  public void testGet() {
+  public void testGet(ID id) {
     // Étape 1 : Préparation des données de test
-    T data = getModels().get(0);
-    Mockito.when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.of(data));
+    T currentModel = getModels().stream().filter(_model -> _model.getId().equals(id)).findFirst().orElse(null);
+    Assertions.assertNotNull(currentModel, "ITEM WITH THIS ID NOT FOUND IN LIST");
+    Mockito.when(getRepository().findById(id)).thenReturn(Optional.of(currentModel));
 
     // Étape 2 : Exécution de la méthode à tester
-    T model = getService().get(getModels().get(0).getId());
+    T model = getService().get(id);
 
     // Étape 3 : Vérification des résultats
     Assertions.assertNotEquals(model, null);
-    assertModelsEquals(model, getModels().get(0));
+    assertModelsEquals(model, currentModel);
   }
 
   public void testGetNull() {
@@ -94,33 +88,32 @@ public abstract class AbstractCRUDServiceUnitTest<ID, T extends AbstractModel<ID
     Assertions.assertNull(model);
   }
 
-  public void testCreate() {
+  public void testCreate(C createRequest, T expectedItem) {
     // Étape 1 : Préparation des données de test
     Mockito.when(getRepository().save(ArgumentMatchers.any(getClassName()))).thenAnswer(invocation -> {
       T model = invocation.getArgument(0);
       model.setId(getModels().get(0).getId());
       return model;
     });
-    C requestDto = buildCreateRequest();
 
     // Étape 2 : Exécution de la méthode à tester
-    T modelCreated = getService().create(requestDto);
+    T modelCreated = getService().create(createRequest);
 
     // Étape 3 : Vérification des résultats
     Assertions.assertNotNull(modelCreated);
-    assertModelsEquals(modelCreated, getModels().get(0));
+    assertModelsEquals(modelCreated, expectedItem);
   }
 
-  public void testUpdate() {
+  public void testUpdate(ID id, U updateRequest, T expectedItem) {
     // Étape 1 : Préparation des données de test
-    U requestDto = buildUpdateRequest();
-    T currentModel = getModels().get(0);
-    Mockito.when(getRepository().findById(getModels().get(0).getId())).thenReturn(Optional.of(currentModel));
+    T currentModel = getModels().stream().filter(_model -> _model.getId().equals(id)).findFirst().orElse(null);
+    Assertions.assertNotNull(currentModel, "ITEM WITH THIS ID NOT FOUND IN LIST");
+    Mockito.when(getRepository().findById(id)).thenReturn(Optional.of(currentModel));
 
     // Étape 2 : Exécution de la méthode à tester
-    T modelUpdated = getService().update(getModels().get(0).getId(), requestDto);
+    T modelUpdated = getService().update(getModels().get(0).getId(), updateRequest);
 
     // Étape 3 : Vérification des résultats
-    assertModelsEquals(modelUpdated, getModels().get(0));
+    assertModelsEquals(modelUpdated, expectedItem);
   }
 }

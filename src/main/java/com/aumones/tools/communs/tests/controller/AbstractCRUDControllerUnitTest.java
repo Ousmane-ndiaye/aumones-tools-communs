@@ -37,16 +37,6 @@ public abstract class AbstractCRUDControllerUnitTest<ID, T extends AbstractModel
 
   public abstract List<T> getModels();
 
-  public abstract void setup();
-
-  public abstract C buildCreateRequest();
-
-  public abstract U buildUpdateRequest();
-
-  public abstract T buildCreatedResult();
-
-  public abstract T buildUpdatedResult(ID id);
-
   public abstract void assertResponseDto(ResultActions result, int index, T model) throws Exception;
 
   public abstract void assertResponseDto(ResultActions result, T model) throws Exception;
@@ -68,18 +58,18 @@ public abstract class AbstractCRUDControllerUnitTest<ID, T extends AbstractModel
     }
   }
 
-  public void testListWithPageable(String endpoint) throws Exception {
+  public void testListWithPageable(String endpoint, int pageSize, int currentPage) throws Exception {
     // Étape 1 : Préparation des données de test
     MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-    requestParams.add("page", "0");
-    int pageSize = 10;
-    Pageable pageable = PageRequest.of(0, pageSize);
+    requestParams.add("page", String.valueOf(currentPage));
+    Pageable pageable = PageRequest.of(currentPage, pageSize);
     Page<T> page = new PageImpl<>(getModels(), pageable, getModels().size());
 
     Mockito.when(getService().list(ArgumentMatchers.eq(pageable))).thenReturn(page);
 
     // Étape 2 : Exécution de l'api à tester
-    ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(endpoint).queryParams(requestParams)).andDo(MockMvcResultHandlers.print());
+    ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(endpoint).queryParams(requestParams))
+        .andDo(MockMvcResultHandlers.print());
 
     // Étape 3 : Vérification des résultats
     result.andExpect(MockMvcResultMatchers.status().isOk())
@@ -107,11 +97,9 @@ public abstract class AbstractCRUDControllerUnitTest<ID, T extends AbstractModel
     assertResponseDto(result, model);
   }
 
-  public void testCreate(String endpoint) throws Exception {
+  public void testCreate(String endpoint, C createRequest, T expectedItem) throws Exception {
     // Étape 1 : Préparation des données de test
-    C createRequest = buildCreateRequest();
-    T createResult = buildCreatedResult();
-    Mockito.when(getService().create(createRequest)).thenReturn(createResult);
+    Mockito.when(getService().create(createRequest)).thenReturn(expectedItem);
 
     // Étape 2 : Exécution de l'api à tester
     ObjectMapper objectMapper = new ObjectMapper();
@@ -127,14 +115,12 @@ public abstract class AbstractCRUDControllerUnitTest<ID, T extends AbstractModel
         .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
 
-    assertResponseDto(result, createResult);
+    assertResponseDto(result, expectedItem);
   }
 
-  public void testUpdate(String endpoint, ID id) throws Exception {
+  public void testUpdate(String endpoint, ID id, U updateRequest, T expectedItem) throws Exception {
     // Étape 1 : Préparation des données de test
-    U updateRequest = buildUpdateRequest();
-    T updateResult = buildUpdatedResult(id);
-    Mockito.when(getService().update(ArgumentMatchers.eq(id), ArgumentMatchers.eq(updateRequest))).thenReturn(updateResult);
+    Mockito.when(getService().update(ArgumentMatchers.eq(id), ArgumentMatchers.eq(updateRequest))).thenReturn(expectedItem);
 
     // Étape 2 : Exécution de l'api à tester
     ObjectMapper objectMapper = new ObjectMapper();
@@ -150,6 +136,6 @@ public abstract class AbstractCRUDControllerUnitTest<ID, T extends AbstractModel
         .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
 
-    assertResponseDto(result, updateResult);
+    assertResponseDto(result, expectedItem);
   }
 }

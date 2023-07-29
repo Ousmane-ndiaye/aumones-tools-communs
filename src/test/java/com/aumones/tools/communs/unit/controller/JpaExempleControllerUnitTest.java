@@ -52,40 +52,6 @@ public class JpaExempleControllerUnitTest extends AbstractCRUDAndSearchControlle
   }
 
   @Override
-  public ExempleSearchRequestDto buildSearchRequest() {
-    ExempleSearchRequestDto exempleSearchRequest = new ExempleSearchRequestDto();
-    exempleSearchRequest.setName(models.get(0).getName());
-    return exempleSearchRequest;
-  }
-
-  @Override
-  public MultiValueMap<String, String> buildRequestParams() {
-    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-    requestParams.add("name", models.get(0).getName());
-    return requestParams;
-  }
-
-  @Override
-  public JpaExempleCreateRequestDto buildCreateRequest() {
-    return new JpaExempleCreateRequestDto("Peter Jefferson", 25);
-  }
-
-  @Override
-  public JpaExempleUpdateRequestDto buildUpdateRequest() {
-    return new JpaExempleUpdateRequestDto("Peter Jefferson", 25);
-  }
-
-  @Override
-  public JpaExempleModel buildCreatedResult() {
-    return new JpaExempleModel(789L, "Peter Jefferson", 25);
-  }
-
-  @Override
-  public JpaExempleModel buildUpdatedResult(Long id) {
-    return new JpaExempleModel(id, "Peter Jefferson", 25);
-  }
-
-  @Override
   public void assertResponseDto(ResultActions result, int index, JpaExempleModel model) throws Exception {
     result.andExpect(jsonPath("$[" + index + "].id").value(model.getId()))
         .andExpect(jsonPath("$[" + index + "].name").value(model.getName()))
@@ -111,21 +77,39 @@ public class JpaExempleControllerUnitTest extends AbstractCRUDAndSearchControlle
 
   @Test
   public void testListWithSearch() throws Exception {
-    super.testListWithSearch("/api/exemple-jpa/list");
+    ExempleSearchRequestDto exempleSearchRequest = new ExempleSearchRequestDto();
+    exempleSearchRequest.setName(models.get(0).getName());
+    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("name", models.get(0).getName());
+
+    super.testListWithSearch("/api/exemple-jpa/list", exempleSearchRequest, requestParams);
   }
 
   @Test
   public void testListWithSearchAndPageable() throws Exception {
-    super.testListWithSearchAndPageable("/api/exemple-jpa/list/pageable");
+    ExempleSearchRequestDto exempleSearchRequest = new ExempleSearchRequestDto();
+    exempleSearchRequest.setName(models.get(0).getName());
+    MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("name", models.get(0).getName());
+    super.testListWithSearchAndPageable("/api/exemple-jpa/list/pageable", exempleSearchRequest, requestParams,
+        10, 0);
   }
 
   @Test
   public void testCreate() throws Exception {
-    super.testCreate("/api/exemple-jpa/create");
+    JpaExempleCreateRequestDto createRequest = new JpaExempleCreateRequestDto(models.get(0).getName(),
+        models.get(0).getAge());
+    JpaExempleModel expectedItem = new JpaExempleModel(models.get(0).getId(),
+        "Peter Jefferson", 25);
+    super.testCreate("/api/exemple-jpa/create", createRequest, expectedItem);
   }
 
   @Test
   public void testUpdate() throws Exception {
-    super.testUpdate("/api/exemple-jpa/update/"+models.get(0).getId(), models.get(0).getId());
+    String endpoint = "/api/exemple-jpa/update/"+models.get(0).getId();
+    JpaExempleUpdateRequestDto updateRequest = new JpaExempleUpdateRequestDto("Peter Jefferson", 25);
+    JpaExempleModel expectedItem = new JpaExempleModel(models.get(0).getId(),
+        "Peter Jefferson", 25);
+    super.testUpdate(endpoint, models.get(0).getId(), updateRequest, expectedItem);
   }
 }

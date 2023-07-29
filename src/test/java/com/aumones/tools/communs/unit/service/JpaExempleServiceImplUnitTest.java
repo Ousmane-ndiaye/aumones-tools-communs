@@ -49,28 +49,12 @@ public class JpaExempleServiceImplUnitTest extends AbstractCRUDAndSearchServiceU
     return this.models;
   }
 
-  @Override
   @BeforeEach
   public void setup() {}
 
   @Override
   public Class<JpaExempleModel> getClassName() {
     return JpaExempleModel.class;
-  }
-
-  @Override
-  public JpaExempleCreateRequestDto buildCreateRequest() {
-    return new JpaExempleCreateRequestDto(models.get(0).getName(), models.get(0).getAge());
-  }
-
-  @Override
-  public JpaExempleUpdateRequestDto buildUpdateRequest() {
-    return new JpaExempleUpdateRequestDto("Peter Jefferson", 25);
-  }
-
-  @Override
-  public ExempleSearchRequestDto buildSearchRequest() {
-    return new ExempleSearchRequestDto();
   }
 
   @Override
@@ -81,50 +65,48 @@ public class JpaExempleServiceImplUnitTest extends AbstractCRUDAndSearchServiceU
   }
 
   @Test
-  @Override
   public void testListWithSearch() {
-    super.testListWithSearch();
+    ExempleSearchRequestDto searchRequest = new ExempleSearchRequestDto();
+    super.testListWithSearch(searchRequest);
   }
 
   @Test
-  @Override
   public void testListWithSearchAndPageable() {
-    super.testListWithSearchAndPageable();
+    ExempleSearchRequestDto searchRequest = new ExempleSearchRequestDto();
+    super.testListWithSearchAndPageable(searchRequest, 10, 0);
   }
 
   @Test
-  @Override
   public void testList() {
     super.testList();
   }
 
   @Test
-  @Override
   public void testListWithPageable() {
-    super.testListWithPageable();
+    super.testListWithPageable(10, 0);
   }
 
   @Test
-  @Override
   public void testGet() {
-    super.testGet();
+    super.testGet(models.get(0).getId());
   }
 
   @Test
-  @Override
   public void testGetNull() {
     super.testGetNull();
   }
 
   @Test
-  @Override
   public void testCreate() {
-    super.testCreate();
+    JpaExempleCreateRequestDto createRequest = new JpaExempleCreateRequestDto(models.get(0).getName(),
+        models.get(0).getAge());
+    super.testCreate(createRequest, models.get(0));
   }
 
   @Test
-  @Override
   public void testUpdate() {
-    super.testUpdate();
+    JpaExempleUpdateRequestDto updateRequest = new JpaExempleUpdateRequestDto("Peter Jefferson", 25);
+    super.testUpdate(models.get(0).getId(), updateRequest, new JpaExempleModel(models.get(0).getId(),
+        "Peter Jefferson", 25));
   }
 }

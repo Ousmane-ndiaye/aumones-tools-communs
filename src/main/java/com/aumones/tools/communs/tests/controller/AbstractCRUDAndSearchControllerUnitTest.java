@@ -26,21 +26,16 @@ public abstract class AbstractCRUDAndSearchControllerUnitTest<ID, T extends Abst
 
   public abstract AbstractCRUDAndSearchService<ID, T, S, C, U> getService();
 
-  public abstract S buildSearchRequest();
-
   public abstract void assertResponsePageableDto(ResultActions result, int index, T model) throws Exception;
 
-
-  public abstract MultiValueMap<String, String> buildRequestParams();
-
-  public void testListWithSearch(String endpoint) throws Exception {
+  public void testListWithSearch(String endpoint, S searchRequest, MultiValueMap<String, String> requestParams)
+      throws Exception {
     // Étape 1 : Préparation des données de test
-    S searchRequest = buildSearchRequest();
-    MultiValueMap<String, String> requestParams = buildRequestParams();
     Mockito.when(getService().list(ArgumentMatchers.eq(searchRequest))).thenReturn(getModels());
 
     // Étape 2 : Exécution de la méthode à tester
-    ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(endpoint).queryParams(requestParams)).andDo(MockMvcResultHandlers.print());
+    ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(endpoint).queryParams(requestParams))
+        .andDo(MockMvcResultHandlers.print());
 
     // Étape 3 : Vérification des résultats
     result.andExpect(MockMvcResultMatchers.status().isOk())
@@ -54,12 +49,11 @@ public abstract class AbstractCRUDAndSearchControllerUnitTest<ID, T extends Abst
     }
   }
 
-  public void testListWithSearchAndPageable(String endpoint) throws Exception {
+  public void testListWithSearchAndPageable(String endpoint, S searchRequest, MultiValueMap<String, String> requestParams,
+                                            int pageSize, int currentPage) throws Exception {
     // Étape 1 : Préparation des données de test
-    S searchRequest = buildSearchRequest();
-    MultiValueMap<String, String> requestParams = buildRequestParams();
-    requestParams.add("page", "0");
-    Pageable pageable = PageRequest.of(0, 10);
+    requestParams.add("page", String.valueOf(currentPage));
+    Pageable pageable = PageRequest.of(currentPage, pageSize);
     Page<T> page = new PageImpl<>(getModels(), pageable, getModels().size());
 
     Mockito.when(getService().list(ArgumentMatchers.eq(searchRequest), ArgumentMatchers.any(Pageable.class))).thenReturn(page);
